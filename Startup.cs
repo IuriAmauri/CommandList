@@ -1,6 +1,7 @@
 using System;
 using AutoMapper;
 using CommandList.Data;
+using CommandList.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -23,8 +24,10 @@ namespace CommandList
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+
             services.AddDbContext<CommandContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                options.UseSqlServer(GetConnectionString())
             );
 
             services.AddControllers().AddNewtonsoftJson(s => 
@@ -47,12 +50,23 @@ namespace CommandList
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            PrepDb.PrepPopulation(app);
+        }
+
+        private string GetConnectionString()
+        {
+            var server = Configuration["DBServer"] ?? "localhost";
+            var port = Configuration["DBPort"] ?? "1433";
+            var userId = Configuration["DBUser"] ?? "SA";
+            var password = Configuration["DBPassword"] ?? "159753Pass#";
+            var database = Configuration["Database"] ?? "CommandList";
+
+            return $"Server={server},{port};Initial Catalog={database};User Id={userId};Password={password}";
         }
     }
 }

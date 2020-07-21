@@ -1,0 +1,16 @@
+version: '3'
+services:
+    ms-sql-server: 
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        environment: 
+            ACCEPT_EULA: "Y"
+            SA_PASSWORD: "159753Pass#"
+            MSSQL_PID: Express
+        ports: 
+            - "1433:1433"
+    command-list:
+        build: .
+        ports: 
+            - "8080:80"
+        environment: 
+            DBServer: "ms-sql-server"
