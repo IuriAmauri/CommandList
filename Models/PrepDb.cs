@@ -18,7 +18,7 @@ namespace CommandList.Models
 
         public static void SeedData(CommandContext commandContext)
         {
-            System.Console.WriteLine("Applyingm Migrations...");
+            System.Console.WriteLine("Applying Migrations...");
             commandContext.Database.Migrate();
             System.Console.WriteLine("Finished applying migrations...");
 
